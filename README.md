@@ -1,5 +1,5 @@
-# Expo-AI
-Resources regarding the Expo AI hackathon (Anthropic)
+# 2D X-ray to 3D Bone Reconstruction
+Submission for Expo AI Hackathon (sponsors: Anthropic, Google Cloud)
 
 ## Brief Idea
 We are building an AI tool that turns standard 2D X-rays into 3D bone structure. Our goal is to solve two massive global problems:
