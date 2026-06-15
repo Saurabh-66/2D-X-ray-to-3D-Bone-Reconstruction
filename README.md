@@ -46,7 +46,7 @@ Data pipeline uses **batch processing**: downloads N subjects at a time from Hug
 ### Inference (local)
 
 ```bash
-# Single image (AP only — duplicated as lateral)
+# Single image (AP only - duplicated as lateral)
 python -m model.inference --ap xray.png -o output.glb
 
 # Biplanar (AP + Lateral)
@@ -71,7 +71,7 @@ bash scripts/sync_cluster.sh --dry-run    # Preview what would be synced
 ### Training (SLURM cluster)
 
 ```bash
-# Clean start (delete old data/checkpoints first — see below)
+# Clean start (delete old data/checkpoints first - see below)
 sbatch slurm_train.sh
 ```
 
@@ -104,10 +104,10 @@ cd ~/Expo-AI && git pull && sbatch slurm_train.sh
 ### Web App
 
 ```bash
-# Terminal 1 — Backend (FastAPI)
+# Terminal 1 - Backend (FastAPI)
 uv run python backend/main.py    # http://localhost:8000
 
-# Terminal 2 — Frontend (React + Vite)
+# Terminal 2 - Frontend (React + Vite)
 cd frontend && npm install
 npm run dev                       # http://localhost:5173
 ```
@@ -146,6 +146,6 @@ Expo-AI/
 
 ## Technical Insights
 
-**Data**: We use the CADS dataset from HuggingFace — 3 subsets: TotalSegmentator (1,203 full-body CTs), VerSe (450 spine CTs), and RibFrac (360 rib/chest CTs). From each CT volume we extract the bone segmentation mask (label 5) as ground truth, and generate synthetic X-rays called Digitally Reconstructed Radiographs (DRRs) by simulating X-ray physics — ray-casting through the full CT volume and integrating attenuation, just like a real X-ray machine. We generate 8 angle variations per subject (AP, lateral, and rotated views), giving us ~106K training samples (~84K train, ~22K val).
+**Data**: We use the CADS dataset from HuggingFace - 3 subsets: TotalSegmentator (1,203 full-body CTs), VerSe (450 spine CTs), and RibFrac (360 rib/chest CTs). From each CT volume we extract the bone segmentation mask (label 5) as ground truth, and generate synthetic X-rays called Digitally Reconstructed Radiographs (DRRs) by simulating X-ray physics — ray-casting through the full CT volume and integrating attenuation, just like a real X-ray machine. We generate 8 angle variations per subject (AP, lateral, and rotated views), giving us ~106K training samples (~84K train, ~22K val).
 
-**Evaluation & Metrics**: We evaluate using the **Dice coefficient** — the volumetric overlap between the predicted 3D bone voxels and the ground-truth bone mask. Dice ranges from 0 (no overlap) to 1 (perfect). Our current best validation Dice is **~0.64**. We also visually inspect reconstructed GLB meshes against ground truth at validation checkpoints every 10 epochs. The Dice score captures overall shape fidelity — at 0.64, the model reconstructs recognizable bone anatomy (spine, ribcage, pelvis) but misses fine detail like individual vertebral processes. We additionally track training loss (BCE on occupancy predictions) and monitor for overfitting by comparing train vs validation loss curves.
+**Evaluation & Metrics**: We evaluate using the **Dice coefficient**, the volumetric overlap between the predicted 3D bone voxels and the ground-truth bone mask. Dice ranges from 0 (no overlap) to 1 (perfect). Our current best validation Dice is **~0.64**. We also visually inspect reconstructed GLB meshes against ground truth at validation checkpoints every 10 epochs. The Dice score captures overall shape fidelity - at 0.64, the model reconstructs recognizable bone anatomy (spine, ribcage, pelvis) but misses fine detail like individual vertebral processes. We additionally track training loss (BCE on occupancy predictions) and monitor for overfitting by comparing train vs validation loss curves.
